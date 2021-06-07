@@ -1,52 +1,13 @@
 const { ALIVE, DEAD } = require('../states');
 const Cell = require('./Cell');
 
-/* 
-
-for (let i = 0; i < this.board.length; i++) {
-for (let j = 0; j < this.board[i].length; j++) {
-    const HAY_SUPERIOR = i - 1 >= 0;
-    const HAY_INFERIOR = i + 1 < this.rows;
-    const HAY_IZQUIERDA = j - 1 >= 0;
-    const HAY_DERECHA = j + 1 < this.columns;
-    const SUPERIOR = i - 1;
-    const INFERIOR = i + 1;
-    const IZQUIERDA = j - 1;
-    const DERECHA = j + 1;
-    if (HAY_SUPERIOR) {
-        this.board[i][j].neighbors.push(this.board[SUPERIOR][j]);
-        if (HAY_IZQUIERDA) {
-            this.board[i][j].neighbors.push(this.board[SUPERIOR][IZQUIERDA]);
-        }
-        if (HAY_DERECHA) {
-            this.board[i][j].neighbors.push(this.board[SUPERIOR][DERECHA]);
-        }
-    }
-    if (HAY_INFERIOR) {
-        this.board[i][j].neighbors.push(this.board[INFERIOR][j]);
-        if (HAY_IZQUIERDA) {
-            this.board[i][j].neighbors.push(this.board[INFERIOR][IZQUIERDA]);
-        }
-        if (HAY_DERECHA) {
-            this.board[i][j].neighbors.push(this.board[INFERIOR][DERECHA]);
-        }
-    }
-    if (HAY_IZQUIERDA) {
-        this.board[i][j].neighbors.push(this.board[i][IZQUIERDA]);
-    }
-    if (HAY_DERECHA) {
-        this.board[i][j].neighbors.push(this.board[i][DERECHA]);
-    }
-}
-}
-*/
-
 module.exports = class Board {
-    constructor(rows, colums, inputString) {
+    constructor(rows, columns, inputString, iterations) {
         this.rows = rows;
-        this.colums = colums;
+        this.columns = columns;
         this.inputString = inputString;
         this.board = null;
+        this.iterations = iterations;
     }
 
     generateMatrixBoard() {
@@ -58,8 +19,55 @@ module.exports = class Board {
         this.board = this.board.map(row => {
             return row.map(col => {
                 return col === '.' ? new Cell('.') : new Cell('*')
-            })
+            });
         });
+    }
+
+    countNeighbors() {
+        for (let i = 0; i < this.rows; i++) {
+            for (let j = 0; j < this.columns; j++) {
+                if (i - 1 >= 0) {
+                    if (this.board[i - 1][j].state == '*') this.board[i][j].neighborsAlive++;
+                }
+                if (i - 1 >= 0 && j - 1 >= 0) {
+                    if (this.board[i - 1][j - 1].state == '*') this.board[i][j].neighborsAlive++;
+                }
+                if (i - 1 >= 0 && j + 1 < this.columns) {
+                    if (this.board[i - 1][j + 1].state == '*') this.board[i][j].neighborsAlive++;
+                }
+                if (j - 1 >= 0) {
+                    if (this.board[i][j - 1].state == '*') this.board[i][j].neighborsAlive++;
+                }
+                if (j + 1 < this.columns) {
+                    if (this.board[i][j + 1].state == '*') this.board[i][j].neighborsAlive++;
+                }
+                if (i + 1 < this.rows) {
+                    if (this.board[i + 1][j].state == '*') this.board[i][j].neighborsAlive++;
+                }
+                if (i + 1 < this.rows && j - 1 >= 0) {
+                    if (this.board[i + 1][j - 1].state == '*') this.board[i][j].neighborsAlive++;
+                }
+                if (i + 1 < this.rows && j + 1 < this.columns) {
+                    if (this.board[i + 1][j + 1].state == '*') this.board[i][j].neighborsAlive++;
+                }
+            }
+        }
+    }
+
+    resetNeighbors() {
+        for (let i = 0; i < this.rows; i++) {
+            for (let j = 0; j < this.columns; j++) {
+                this.board[i][j].neighborsAlive = 0;
+            }
+        }
+    }
+
+    calculateNextCellStates() {
+        for (let i = 0; i < this.rows; i++) {
+            for (let j = 0; j < this.columns; j++) {
+                this.board[i][j].calculateNextState();
+            }
+        }
     }
 
     print() {

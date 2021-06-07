@@ -4,9 +4,10 @@ const Cell = require('../src/models/Cell');
 describe('Tests in Board class', () => {
 
   let board;
+  let initialString = '........\n....*...\n...**...\n........\n';
 
   beforeAll(() => {
-    board = new Board(4, 8, '........\n....*...\n...**...\n........\n');
+    board = new Board(4, 8, initialString);
   });
 
   test('should fill the matrix with the string input', () => {
@@ -38,7 +39,17 @@ describe('Tests in Board class', () => {
     board.generateMatrixBoard();
     board.fillMatrixWithCells();
     let result = board.print();
-    expect(result).toBe('........\n....*...\n...**...\n........\n');
+    expect(result).toBe(initialString);
+  });
+
+  test('should generate the matrix string with the next cell states', () => {
+    let result = '';
+    board.generateMatrixBoard();
+    board.fillMatrixWithCells();
+    board.countNeighbors();
+    board.calculateNextCellStates();
+    result = board.printNextGeneration();
+    expect(result).toBe('........\n...**...\n...**...\n........\n');
   });
 
 });
