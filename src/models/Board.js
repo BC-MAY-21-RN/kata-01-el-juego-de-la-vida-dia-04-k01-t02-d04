@@ -26,30 +26,22 @@ module.exports = class Board {
     countNeighbors() {
         for (let i = 0; i < this.rows; i++) {
             for (let j = 0; j < this.columns; j++) {
-                if (i - 1 >= 0) {
+                if (i - 1 >= 0)
                     if (this.board[i - 1][j].state == '*') this.board[i][j].neighborsAlive++;
-                }
-                if (i - 1 >= 0 && j - 1 >= 0) {
+                if (i - 1 >= 0 && j - 1 >= 0)
                     if (this.board[i - 1][j - 1].state == '*') this.board[i][j].neighborsAlive++;
-                }
-                if (i - 1 >= 0 && j + 1 < this.columns) {
+                if (i - 1 >= 0 && j + 1 < this.columns)
                     if (this.board[i - 1][j + 1].state == '*') this.board[i][j].neighborsAlive++;
-                }
-                if (j - 1 >= 0) {
+                if (j - 1 >= 0)
                     if (this.board[i][j - 1].state == '*') this.board[i][j].neighborsAlive++;
-                }
-                if (j + 1 < this.columns) {
+                if (j + 1 < this.columns)
                     if (this.board[i][j + 1].state == '*') this.board[i][j].neighborsAlive++;
-                }
-                if (i + 1 < this.rows) {
+                if (i + 1 < this.rows)
                     if (this.board[i + 1][j].state == '*') this.board[i][j].neighborsAlive++;
-                }
-                if (i + 1 < this.rows && j - 1 >= 0) {
+                if (i + 1 < this.rows && j - 1 >= 0)
                     if (this.board[i + 1][j - 1].state == '*') this.board[i][j].neighborsAlive++;
-                }
-                if (i + 1 < this.rows && j + 1 < this.columns) {
+                if (i + 1 < this.rows && j + 1 < this.columns)
                     if (this.board[i + 1][j + 1].state == '*') this.board[i][j].neighborsAlive++;
-                }
             }
         }
     }
